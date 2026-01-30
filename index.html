@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="ADHD-friendly task decider - stop overthinking, start doing">
+
+    <title>What Now?</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Home Screen -->
+        <div id="screen-home" class="screen active">
+            <div class="home-container">
+                <h1 class="app-title">What Now?</h1>
+                <p class="app-subtitle">Stop overthinking. Start doing.</p>
+
+                <div class="home-buttons">
+                    <button id="btn-add-task" class="btn btn-primary btn-large">
+                        Add Task
+                    </button>
+                    <button id="btn-what-next" class="btn btn-secondary btn-large">
+                        What Next
+                    </button>
+                </div>
+
+                <button id="btn-manage-tasks" class="btn btn-text">
+                    Manage Tasks
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Task Screen - Step 1: Task Type -->
+        <div id="screen-add-type" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="home">←</button>
+                <h2>What type of task?</h2>
+                <div class="step-indicator">1 of 5</div>
+            </div>
+            <div class="screen-content">
+                <div id="task-types" class="option-grid">
+                    <!-- Populated by JS -->
+                </div>
+                <button id="btn-add-custom-type" class="btn btn-outline btn-small">
+                    + Add Custom Type
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Task Screen - Step 2: Time Required -->
+        <div id="screen-add-time" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="add-type">←</button>
+                <h2>How long will it take?</h2>
+                <div class="step-indicator">2 of 5</div>
+            </div>
+            <div class="screen-content">
+                <div class="option-grid">
+                    <button class="option-btn time-option" data-value="5">5 min</button>
+                    <button class="option-btn time-option" data-value="15">15 min</button>
+                    <button class="option-btn time-option" data-value="30">30 min</button>
+                    <button class="option-btn time-option" data-value="60">1 hour+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Task Screen - Step 3: Social Battery -->
+        <div id="screen-add-social" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="add-time">←</button>
+                <h2>Social battery needed?</h2>
+                <div class="step-indicator">3 of 5</div>
+            </div>
+            <div class="screen-content">
+                <div class="option-list">
+                    <button class="option-btn level-option" data-value="low">
+                        <span class="level-icon">🔋</span>
+                        <span class="level-label">Low</span>
+                        <span class="level-desc">Solo, no interaction</span>
+                    </button>
+                    <button class="option-btn level-option" data-value="medium">
+                        <span class="level-icon">🔋🔋</span>
+                        <span class="level-label">Medium</span>
+                        <span class="level-desc">Some interaction</span>
+                    </button>
+                    <button class="option-btn level-option" data-value="high">
+                        <span class="level-icon">🔋🔋🔋</span>
+                        <span class="level-label">High</span>
+                        <span class="level-desc">Lots of people</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Task Screen - Step 4: Energy Level -->
+        <div id="screen-add-energy" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="add-social">←</button>
+                <h2>Energy level needed?</h2>
+                <div class="step-indicator">4 of 5</div>
+            </div>
+            <div class="screen-content">
+                <div class="option-list">
+                    <button class="option-btn level-option" data-value="low">
+                        <span class="level-icon">⚡</span>
+                        <span class="level-label">Low</span>
+                        <span class="level-desc">Can do while tired</span>
+                    </button>
+                    <button class="option-btn level-option" data-value="medium">
+                        <span class="level-icon">⚡⚡</span>
+                        <span class="level-label">Medium</span>
+                        <span class="level-desc">Need some focus</span>
+                    </button>
+                    <button class="option-btn level-option" data-value="high">
+                        <span class="level-icon">⚡⚡⚡</span>
+                        <span class="level-label">High</span>
+                        <span class="level-desc">Need full power</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Task Screen - Step 5: Name & Description -->
+        <div id="screen-add-details" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="add-energy">←</button>
+                <h2>Name your task</h2>
+                <div class="step-indicator">5 of 5</div>
+            </div>
+            <div class="screen-content">
+                <div class="form-group">
+                    <label for="task-name">Task name</label>
+                    <input type="text" id="task-name" placeholder="e.g., Clean the kitchen" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label for="task-desc">Brief description (optional)</label>
+                    <textarea id="task-desc" placeholder="Any extra details..." rows="3" maxlength="150"></textarea>
+                </div>
+                <button id="btn-save-task" class="btn btn-primary btn-large">
+                    Save Task
+                </button>
+            </div>
+        </div>
+
+        <!-- What Next Screen - Step 1: Current State -->
+        <div id="screen-state" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="home">←</button>
+                <h2>How are you feeling?</h2>
+            </div>
+            <div class="screen-content">
+                <div class="state-section">
+                    <h3>Energy level right now</h3>
+                    <div class="option-row">
+                        <button class="option-btn state-btn" data-type="energy" data-value="low">Low</button>
+                        <button class="option-btn state-btn" data-type="energy" data-value="medium">Medium</button>
+                        <button class="option-btn state-btn" data-type="energy" data-value="high">High</button>
+                    </div>
+                </div>
+                <div class="state-section">
+                    <h3>Social battery right now</h3>
+                    <div class="option-row">
+                        <button class="option-btn state-btn" data-type="social" data-value="low">Low</button>
+                        <button class="option-btn state-btn" data-type="social" data-value="medium">Medium</button>
+                        <button class="option-btn state-btn" data-type="social" data-value="high">High</button>
+                    </div>
+                </div>
+                <div class="state-section">
+                    <h3>Time available</h3>
+                    <div class="option-row">
+                        <button class="option-btn state-btn" data-type="time" data-value="5">5 min</button>
+                        <button class="option-btn state-btn" data-type="time" data-value="15">15 min</button>
+                        <button class="option-btn state-btn" data-type="time" data-value="30">30 min</button>
+                        <button class="option-btn state-btn" data-type="time" data-value="60">1 hr+</button>
+                    </div>
+                </div>
+                <button id="btn-find-task" class="btn btn-primary btn-large" disabled>
+                    Find Me a Task
+                </button>
+            </div>
+        </div>
+
+        <!-- What Next Screen - Step 2: Swipe Cards -->
+        <div id="screen-swipe" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="home">←</button>
+                <h2>Swipe to decide</h2>
+            </div>
+            <div class="swipe-container">
+                <div id="card-stack" class="card-stack">
+                    <!-- Cards populated by JS -->
+                </div>
+                <div class="swipe-instructions">
+                    <span class="swipe-left">← Skip</span>
+                    <span class="swipe-right">Do it →</span>
+                </div>
+            </div>
+            <div id="no-tasks-message" class="no-tasks hidden">
+                <p>No more tasks to show!</p>
+                <button class="btn btn-primary" data-back="home">Back Home</button>
+            </div>
+        </div>
+
+        <!-- Task Accepted Screen -->
+        <div id="screen-accepted" class="screen">
+            <div class="accepted-container">
+                <div class="accepted-icon">✓</div>
+                <h2>Let's do it!</h2>
+                <div id="accepted-task" class="accepted-task">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="accepted-buttons">
+                    <button id="btn-done" class="btn btn-primary btn-large">Done!</button>
+                    <button id="btn-not-now" class="btn btn-outline">Not now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Tasks Screen -->
+        <div id="screen-manage" class="screen">
+            <div class="screen-header">
+                <button class="btn-back" data-back="home">←</button>
+                <h2>Your Tasks</h2>
+            </div>
+            <div class="screen-content">
+                <div id="task-list" class="task-list">
+                    <!-- Populated by JS -->
+                </div>
+                <div id="no-tasks-yet" class="no-tasks hidden">
+                    <p>No tasks yet. Add some!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Type Modal -->
+        <div id="modal-custom-type" class="modal hidden">
+            <div class="modal-content">
+                <h3>Add Custom Type</h3>
+                <input type="text" id="custom-type-input" placeholder="Type name" maxlength="20">
+                <div class="modal-buttons">
+                    <button id="btn-cancel-type" class="btn btn-outline">Cancel</button>
+                    <button id="btn-confirm-type" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => console.log('SW registered'))
+                    .catch((err) => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>
