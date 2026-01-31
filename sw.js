@@ -1,5 +1,5 @@
 // Service Worker for What Now? PWA
-const CACHE_NAME = 'whatnow-v1';
+const CACHE_NAME = 'whatnow-v2';
 const ASSETS = [
     '/',
     '/index.html',
